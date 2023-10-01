@@ -3,6 +3,7 @@ const { StatusCodes } = require('http-status-codes')
 
 
 const errorHandler = (err, req, res, next) => {
+    console.log(err)
     if (err instanceof CustomAPiError) {
         res.status(err.statusCode).json({ msg: err.message })
     }
