@@ -5,6 +5,11 @@ const express = require('express')
 const app = express()
 const connectDB = require('./db/connectDB')
 
+const helmet = require('helmet')
+const cors = require('cors')
+const xss = require('xss-clean')
+const rateLimiter = require('express-rate-limiter')
+
 // Routers
 const authRouter = require('./routes/users')
 const itemsRouter = require('./routes/items')
@@ -13,7 +18,10 @@ const itemsRouter = require('./routes/items')
 const authenticateUser = require('./middleware/authentication')
 const errorHandlerMiddleware = require('./middleware/error-handler')
 const notFoundMiddleware = require('./middleware/not-found')
+
 app.use(express.json())
+app.use(cors())
+app.use(helmet())
 
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/items', authenticateUser, itemsRouter)
