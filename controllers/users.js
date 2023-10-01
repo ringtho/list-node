@@ -1,11 +1,12 @@
-
+const User = require('../models/user')
 
 const login = (req, res) => {
     res.json({ message: 'Login Page' })
 }
 
 const signup = (req, res) => {
-  res.json({ message: 'Signup Page' })
+  const { firstName, lastName, email, password } = req.body
+  res.json({ msg: req.body })
 }
 
 module.exports = {
