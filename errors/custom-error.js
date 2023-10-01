@@ -4,3 +4,5 @@ class CustomAPiError extends Error {
         super(message)
     }
 }
+
+module.exports = CustomAPiError
