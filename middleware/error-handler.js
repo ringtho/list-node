@@ -1,16 +1,28 @@
-const { CustomAPiError } = require('../errors')
 const { StatusCodes } = require('http-status-codes')
 
+const errorHandler = async (err, req, res, next) => {
+  const customError = {
+    statusCode: err.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,
+    msg: err.message || 'Something went wrong, Please try again later',
+  }
 
-const errorHandler = (err, req, res, next) => {
-    console.log(err)
-    if (err instanceof CustomAPiError) {
-        res.status(err.statusCode).json({ msg: err.message })
-    }
-    res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ msg: 'Something is wrong, Please try again later' })
-    next()
+  if (err.name === 'ValidationError') {
+    customError.msg = Object.values(err.errors)
+      .map((item) => item.message)
+      .join(',')
+    customError.statusCode = StatusCodes.BAD_REQUEST
+  }
+
+  if (err.code && err.code === 11000) {
+    customError.msg = `Account already exists`
+    customError.statusCode = StatusCodes.BAD_REQUEST
+  }
+
+  if (err.name === 'CastError') {
+    customError.msg = `No item found with id: ${err.value}`
+    customError.statusCode = StatusCodes.NOT_FOUND
+  }
+  return res.status(customError.statusCode).json({ msg: customError.msg })
 }
 
 module.exports = errorHandler
