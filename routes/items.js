@@ -6,12 +6,16 @@ const {
     getSingleItem,
     createItem,
     updateItem, 
-    deleteItem
+    deleteItem,
+    searchItems
 } = require('../controllers/items')
 
 router.route('/')
     .post(createItem)
     .get(getAllItems)
+
+router.route('/search')
+    .post(searchItems)
 
 router.route('/:id')
     .patch(updateItem)

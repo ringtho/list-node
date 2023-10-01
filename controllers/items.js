@@ -1,4 +1,4 @@
-const { NotFoundError } = require('../errors')
+const { NotFoundError, BadRequestError } = require('../errors')
 const Item = require('../models/item')
 const { StatusCodes } = require('http-status-codes')
 
@@ -54,10 +54,27 @@ const deleteItem = async (req, res) => {
   })
 }
 
+const searchItems = async (req, res) => {
+  const { body: { search }, user: { userId }} = req
+  if (!search) {
+    throw new BadRequestError('Please provide a search parameter')
+  }
+  const regex = new RegExp(search, 'i')
+  const items = await Item.find({
+    item: { $regex: regex },
+    createdBy: userId
+  })
+  if (items.length === 0) {
+    throw new NotFoundError('No items match your search')
+  }
+  res.status(StatusCodes.OK).json({ items, count: items.length })
+}
+
 module.exports = {
     getAllItems,
     createItem,
     getSingleItem,
     updateItem,
-    deleteItem
+    deleteItem,
+    searchItems
 }
