@@ -1,7 +1,5 @@
 const User = require('../models/user')
 const { StatusCodes } = require('http-status-codes')
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
 const { BadRequestError, UnAuthenticatedError } = require('../errors')
 
 const login = async (req, res) => {
