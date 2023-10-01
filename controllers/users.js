@@ -21,9 +21,7 @@ const login = async (req, res) => {
 }
 
 const signup = async (req, res) => {
-  const user = (await User.create(req.body)).select(
-    '-password'
-  )
+  const user = (await User.create(req.body))
   const { first_name, last_name, email } = user
   res.status(StatusCodes.CREATED).json({ user: 
     { first_name, last_name, email } 
