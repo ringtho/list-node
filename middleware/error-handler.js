@@ -10,6 +10,7 @@ const errorHandler = (err, req, res, next) => {
     res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ msg: 'Something is wrong, Please try again later' })
+    next()
 }
 
 module.exports = errorHandler
