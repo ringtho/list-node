@@ -4,7 +4,7 @@ const { StatusCodes } = require('http-status-codes')
 
 const getAllItems = async (req, res) => {
   const { userId } = req.user
-  const items = await Item.find({ createdBy: userId }).sort(' completed updatedAt')
+  const items = await Item.find({ createdBy: userId }).sort(' completed -updatedAt -createdAt')
   res.status(StatusCodes.OK).json({ items, count: items.length })
 }
 
