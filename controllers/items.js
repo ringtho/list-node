@@ -4,12 +4,18 @@ const { StatusCodes } = require('http-status-codes')
 
 const getAllItems = async (req, res) => {
   const { userId } = req.user
-  const { sort, fields, numericFilters } = req.query
-  const queryObject = {}
+  const { sort, item } = req.query
+  const queryObject = { createdBy: userId }
+  if (item) {
+    queryObject.item = { $regex: item, $options: 'i' }
+  }
 
-  console.log(sort)
+  console.log(queryObject)
 
-  let result = Item.find({ createdBy: userId }).collation({ locale: "en", caseLevel: true }) 
+  let result = Item.find(queryObject).collation({
+    locale: 'en',
+    caseLevel: true,
+  }) 
   if (sort) {
     const sortList = sort.split(',').join(' ')
     result = result.sort(sortList)
