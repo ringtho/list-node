@@ -4,6 +4,7 @@ const { Schema } = mongoose
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
+/** Model Setup for users **/
 const userSchema = new Schema({
   first_name: {
     type: String,
@@ -34,17 +35,28 @@ const userSchema = new Schema({
   }
 }, {timestamps: true})
 
+/* 
+  Method for hashing the password as the 
+  new users details are saved 
+*/
 userSchema.pre('save', async function (){
     const salt = await bcrypt.genSalt(10)
     this.password = await bcrypt.hash(this.password, salt)
 })
 
+/* Method for creating the JWT token in the model */
 userSchema.methods.createJwt = function () {
     return jwt.sign(
         { userId: this._id, first_name: this.first_name, last_name: this.last_name }, 
         process.env.JWT_SECRET, { expiresIn: '30d' })
 }
 
+/* 
+  Method for checking the password provided against 
+  the password in the database. 
+  - This method returns true if it matches and 
+  - false if it doesn't
+*/
 userSchema.methods.checkPassword = async function(password) {
     return await bcrypt.compare(password, this.password)
 }

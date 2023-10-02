@@ -2,6 +2,7 @@ const User = require('../models/user')
 const { StatusCodes } = require('http-status-codes')
 const { BadRequestError, UnAuthenticatedError } = require('../errors')
 
+/* API Endpoint to login a user */
 const login = async (req, res) => {
     const { email, password } = req.body
     if(!email || !password) {
@@ -20,6 +21,7 @@ const login = async (req, res) => {
     res.json({ user: {first_name, last_name}, token })
 }
 
+/* API Endpoint to register a new user */
 const signup = async (req, res) => {
   const user = (await User.create(req.body))
   const { first_name, last_name, email } = user
@@ -28,6 +30,7 @@ const signup = async (req, res) => {
   })
 }
 
+/* API Endpoint to get a logged in user's details */
 const getUser = async (req, res) => {
   const { userId } = req.user
   const user = await User.findOne({ _id: userId }).select(
@@ -35,6 +38,7 @@ const getUser = async (req, res) => {
   res.status(StatusCodes.OK).json({ user })
 }
 
+/* API Endpoint to update a logged in user's details */
 const updateUser = async (req, res) => {
   const { userId } = req.user
   const { first_name, last_name, password } = req.body

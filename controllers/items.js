@@ -2,6 +2,7 @@ const { NotFoundError, BadRequestError } = require('../errors')
 const Item = require('../models/item')
 const { StatusCodes } = require('http-status-codes')
 
+/* API Endpoint to get all items */
 const getAllItems = async (req, res) => {
   const { userId } = req.user
   const { sort, item } = req.query
@@ -9,9 +10,6 @@ const getAllItems = async (req, res) => {
   if (item) {
     queryObject.item = { $regex: item, $options: 'i' }
   }
-
-  console.log(queryObject)
-
   let result = Item.find(queryObject).collation({
     locale: 'en',
     caseLevel: true,
@@ -23,10 +21,10 @@ const getAllItems = async (req, res) => {
     result = result.sort('completed -updatedAt -createdAt')
   }
   const items = await result
-  // const items = await Item.find({ createdBy: userId }).sort('completed -updatedAt -createdAt')
   res.status(StatusCodes.OK).json({ items, count: items.length })
 }
 
+/* API Endpoint to create an item */
 const createItem = async (req, res) => {
   const { userId } = req.user
   req.body.createdBy = userId
@@ -34,6 +32,7 @@ const createItem = async (req, res) => {
   res.status(StatusCodes.CREATED).json({ item })
 }
 
+/* API Endpoint to get a single item */
 const getSingleItem = async (req, res) => {
   const {
     user: { userId },
@@ -46,6 +45,7 @@ const getSingleItem = async (req, res) => {
   res.status(StatusCodes.OK).json({ item })
 }
 
+/* API Endpoint to update an item */
 const updateItem = async (req, res) => {
   const {
     user: { userId },
@@ -60,6 +60,7 @@ const updateItem = async (req, res) => {
   res.status(StatusCodes.OK).json({ item })
 }
 
+/* API Endpoint to delete an items */
 const deleteItem = async (req, res) => {
   const { params: { id }, user: { userId } } = req
   const item = await Item.findOneAndRemove(

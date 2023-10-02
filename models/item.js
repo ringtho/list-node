@@ -1,6 +1,8 @@
 const mongoose = require('mongoose')
 const { Schema } = mongoose
 
+
+/** Model Setup for the items **/
 const itemSchema = new Schema({
     item: {
         type: String,
