@@ -14,9 +14,6 @@ router.route('/')
     .post(createItem)
     .get(getAllItems)
 
-router.route('/search')
-    .post(searchItems)
-
 router.route('/:id')
     .patch(updateItem)
     .get(getSingleItem)
