@@ -4,7 +4,20 @@ const { StatusCodes } = require('http-status-codes')
 
 const getAllItems = async (req, res) => {
   const { userId } = req.user
-  const items = await Item.find({ createdBy: userId }).sort(' completed -updatedAt -createdAt')
+  const { sort, fields, numericFilters } = req.query
+  const queryObject = {}
+
+  console.log(sort)
+
+  let result = Item.find({ createdBy: userId }).collation({ locale: "en", caseLevel: true }) 
+  if (sort) {
+    const sortList = sort.split(',').join(' ')
+    result = result.sort(sortList)
+  } else {
+    result = result.sort('completed -updatedAt -createdAt')
+  }
+  const items = await result
+  // const items = await Item.find({ createdBy: userId }).sort('completed -updatedAt -createdAt')
   res.status(StatusCodes.OK).json({ items, count: items.length })
 }
 
