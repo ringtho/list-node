@@ -1,0 +1,297 @@
+openapi: 3.0.0
+info:
+  title: Shopping List API
+  contact:
+    name: Smith Ringtho
+    email: sringtho@gmail.com
+  version: '1.0'
+servers:
+- url: https://shoppinglist-sringtho-011a8244b601.herokuapp.com/api/v1
+  variables: {}
+paths:
+  /auth/login:
+    post:
+      tags:
+      - Auth
+      summary: Login
+      operationId: Login
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/LoginRequest'
+              - example:
+                  email: john@email.com
+                  password: password
+            example:
+              email: john@email.com
+              password: password
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /auth/signup:
+    post:
+      tags:
+      - Auth
+      summary: Register User
+      operationId: RegisterUser
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/RegisterUserRequest'
+              - example:
+                  first_name: John
+                  last_name: Doe
+                  email: john@email.com
+                  password: password
+            example:
+              first_name: John
+              last_name: Doe
+              email: john@email.com
+              password: password
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security: []
+  /auth/profile:
+    get:
+      tags:
+      - User
+      summary: Get User Details
+      operationId: GetUserDetails
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+    patch:
+      tags:
+      - User
+      summary: Update User
+      operationId: UpdateUser
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/UpdateUserRequest'
+              - example:
+                  first_name: Peter
+                  last_name: Abraham
+            example:
+              first_name: Peter
+              last_name: Abraham
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+  /items:
+    get:
+      tags:
+      - Items
+      summary: Get All Items
+      operationId: GetAllItems
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+    post:
+      tags:
+      - Items
+      summary: Create Item
+      operationId: CreateItem
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/CreateItemRequest'
+              - example:
+                  item: Books
+                  quantity: 6
+                  notes: For School work
+            example:
+              item: Books
+              quantity: 6
+              notes: For School work
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+  /items/{id}:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+        description: The item ID
+    get:
+      tags:
+      - Items
+      summary: Get Single Item
+      operationId: GetSingleItem
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+    patch:
+      tags:
+      - Items
+      summary: Update Item
+      operationId: UpdateItem
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/UpdateItemRequest'
+              - example:
+                  completed: true
+            example:
+              completed: true
+        required: true
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+    delete:
+      tags:
+      - Items
+      summary: Delete Item
+      operationId: DeleteItem
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          headers: {}
+      deprecated: false
+      security:
+      - bearer: []
+components:
+  schemas:
+    LoginRequest:
+      title: LoginRequest
+      required:
+      - email
+      - password
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      example:
+        email: john@email.com
+        password: password
+    RegisterUserRequest:
+      title: RegisterUserRequest
+      required:
+      - first_name
+      - last_name
+      - email
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+      example:
+        first_name: john
+        last_name: doe
+        email: john@email.com
+    CreateItemRequest:
+      title: CreateItemRequest
+      required:
+      - item
+      - quantity
+      - notes
+      type: object
+      properties:
+        item:
+          type: string
+        quantity:
+          type: integer
+          format: int32
+        notes:
+          type: string
+      example:
+        item: Books
+        quantity: 6
+        notes: For School work
+    UpdateItemRequest:
+      title: UpdateItemRequest
+      required:
+      - completed
+      type: object
+      properties:
+        completed:
+          type: boolean
+      example:
+        completed: true
+    UpdateUserRequest:
+      title: UpdateUserRequest
+      required:
+      - first_name
+      type: object
+      properties:
+        first_name:
+          type: string
+      example:
+        first_name: Peter
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+security: []
+tags:
+- name: Auth
+  description: ''
+- name: User
+  description: ''
+- name: Items
+  description: ''

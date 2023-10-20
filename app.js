@@ -31,9 +31,22 @@ app.use(
 app.use(cors())
 app.use(helmet())
 app.use(xss())
-
 app.use(express.json())
 
+// swagger
+const swaggerUI = require('swagger-ui-express')
+const YAML = require('yamljs')
+const swaggerDocument = YAML.load('./swagger.yaml')
+
+app.get('/', (req, res) => {
+  res.send(`
+  <h1>Shopping List API</h1>
+  <a href='/api-docs'>Documentation</a>
+  
+  `)
+})
+
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument))
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/items', authenticateUser, itemsRouter)
 
