@@ -1,6 +1,7 @@
 # Shopping List API
 
 Welcome to the Shopping List API documentation. This API allows you to manage your shopping list and user profiles. You can use it to create, read, update, and delete items on your shopping list, as well as manage your user account.
+**Access the live API:** [Shopping List API on Heroku](https://shoppinglist-sringtho-011a8244b601.herokuapp.com/api/v1)
 
 ## Table of Contents
 
